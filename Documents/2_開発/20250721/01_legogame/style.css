@@ -1,0 +1,235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(45deg, #87CEEB, #98FB98);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.game-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+}
+
+h1 {
+    text-align: center;
+    color: #2E86AB;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #F0F8FF;
+    border-radius: 15px;
+}
+
+.score {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2E86AB;
+}
+
+#new-game-btn {
+    background: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#new-game-btn:hover {
+    background: #FF5252;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.game-board {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.puzzle-area, .blocks-area {
+    flex: 1;
+}
+
+.puzzle-area h2, .blocks-area h2 {
+    text-align: center;
+    color: #2E86AB;
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+.puzzle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
+    background: #DDD;
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border: 3px solid #888;
+}
+
+.grid-cell {
+    background: #F5F5F5;
+    border: 2px dashed #CCC;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.grid-cell.occupied {
+    border: 2px solid #333;
+    border-style: solid;
+}
+
+.grid-cell.drop-zone {
+    background: #E6F3FF;
+    border-color: #2E86AB;
+    transform: scale(1.05);
+}
+
+.available-blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+    background: #F9F9F9;
+    border-radius: 15px;
+    min-height: 200px;
+}
+
+.puzzle-piece {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    cursor: grab;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.puzzle-piece:hover {
+    transform: scale(1.1);
+    box-shadow: 
+        0 5px 10px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+.puzzle-piece.dragging {
+    opacity: 0.7;
+    transform: rotate(5deg) scale(1.1);
+    z-index: 1000;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.success-message {
+    text-align: center;
+    background: linear-gradient(135deg, #FFE66D, #FFD93D);
+    padding: 30px;
+    border-radius: 20px;
+    margin-top: 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.success-message h2 {
+    color: #2E86AB;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.success-message p {
+    color: #333;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    80% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes celebration {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1.2) rotate(-5deg); }
+    75% { transform: scale(1.1) rotate(3deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.celebrate {
+    animation: celebration 0.6s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .game-board {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .puzzle-grid {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .lego-block {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .lego-block::before {
+        width: 20px;
+        height: 20px;
+    }
+}
