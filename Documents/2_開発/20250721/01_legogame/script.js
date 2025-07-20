@@ -101,12 +101,10 @@ class AnimalPuzzleGame {
         const targetBlocks = [...this.targetPattern];
         const extraBlocks = [];
         
-        // ターゲットと同じブロックを追加
         targetBlocks.forEach(color => {
             extraBlocks.push(color);
         });
         
-        // 追加の邪魔ブロック（違う動物の色）を3-5個追加
         const numExtraBlocks = 3 + Math.floor(Math.random() * 3);
         const otherAnimals = Object.values(this.animalData).filter(animal => animal !== this.currentAnimal);
         
@@ -118,7 +116,6 @@ class AnimalPuzzleGame {
             extraBlocks.push(randomColor);
         }
 
-        // ブロックをシャッフル
         this.shuffleArray(extraBlocks);
 
         extraBlocks.forEach((color, index) => {
@@ -132,7 +129,6 @@ class AnimalPuzzleGame {
             block.addEventListener('dragstart', this.handleDragStart.bind(this));
             block.addEventListener('dragend', this.handleDragEnd.bind(this));
             
-            // タッチイベントも追加（モバイル対応）
             block.addEventListener('touchstart', this.handleTouchStart.bind(this));
             block.addEventListener('touchmove', this.handleTouchMove.bind(this));
             block.addEventListener('touchend', this.handleTouchEnd.bind(this));
@@ -187,7 +183,6 @@ class AnimalPuzzleGame {
         }
     }
 
-    // タッチイベント処理（モバイル対応）
     handleTouchStart(e) {
         e.preventDefault();
         this.touchStartPos = {
@@ -233,14 +228,12 @@ class AnimalPuzzleGame {
         const gridCell = document.querySelector(`[data-index="${gridIndex}"]`);
         const newBlock = block.cloneNode(true);
         
-        // イベントリスナーを削除
         newBlock.draggable = false;
         newBlock.style.width = '100%';
         newBlock.style.height = '100%';
         newBlock.style.cursor = 'pointer';
         newBlock.style.backgroundColor = block.dataset.color;
         
-        // クリックで削除できるようにする
         newBlock.addEventListener('click', () => {
             this.removeBlock(gridIndex);
         });
@@ -249,7 +242,6 @@ class AnimalPuzzleGame {
         gridCell.classList.add('occupied');
         this.puzzleGrid[gridIndex] = block.dataset.color;
         
-        // 使用したブロックを削除
         block.remove();
         this.availableBlocks = this.availableBlocks.filter(b => b !== block);
         
@@ -264,13 +256,12 @@ class AnimalPuzzleGame {
         if (blockInCell) {
             const color = this.puzzleGrid[gridIndex];
             
-            // ブロックを利用可能ブロックエリアに戻す
             const blocksContainer = document.getElementById('available-blocks');
             const restoredBlock = document.createElement('div');
             restoredBlock.className = 'puzzle-piece';
             restoredBlock.draggable = true;
             restoredBlock.dataset.color = color;
-            restoredBlock.dataset.blockId = Date.now(); // 新しいID
+            restoredBlock.dataset.blockId = Date.now();
             restoredBlock.style.backgroundColor = color;
             
             restoredBlock.addEventListener('dragstart', this.handleDragStart.bind(this));
@@ -282,7 +273,6 @@ class AnimalPuzzleGame {
             blocksContainer.appendChild(restoredBlock);
             this.availableBlocks.push(restoredBlock);
             
-            // グリッドから削除
             gridCell.removeChild(blockInCell);
             gridCell.classList.remove('occupied');
             this.puzzleGrid[gridIndex] = null;
@@ -317,10 +307,8 @@ class AnimalPuzzleGame {
         this.showSuccessMessage();
         this.playSuccessSound();
         
-        // 動物の完成画像を表示
         this.showCompletedAnimal();
         
-        // 5秒後に新しいゲームを開始
         setTimeout(() => {
             this.newGame();
         }, 5000);
@@ -335,7 +323,6 @@ class AnimalPuzzleGame {
         successMessage.querySelector('p').textContent = `${animalName}のパズルをかんせいできました！`;
         successMessage.classList.remove('hidden');
         
-        // アニメーション効果
         document.querySelector('.puzzle-grid').classList.add('celebrate');
         
         setTimeout(() => {
@@ -345,11 +332,9 @@ class AnimalPuzzleGame {
     }
 
     showCompletedAnimal() {
-        // パズルグリッドに完成した動物の絵を表示
         const puzzleGrid = document.querySelector('.puzzle-grid');
         puzzleGrid.style.position = 'relative';
         
-        // 大きな絵文字オーバーレイを作成
         const animalOverlay = document.createElement('div');
         animalOverlay.className = 'animal-overlay';
         animalOverlay.textContent = this.currentAnimal.emoji;
@@ -369,7 +354,6 @@ class AnimalPuzzleGame {
         
         puzzleGrid.appendChild(animalOverlay);
         
-        // 5秒後にオーバーレイを削除
         setTimeout(() => {
             if (animalOverlay.parentNode) {
                 animalOverlay.parentNode.removeChild(animalOverlay);
@@ -378,7 +362,6 @@ class AnimalPuzzleGame {
     }
 
     playPlaceSound() {
-        // 簡単な音効果をシミュレート
         if (this.audioContext) {
             const oscillator = this.audioContext.createOscillator();
             const gainNode = this.audioContext.createGain();
@@ -397,7 +380,7 @@ class AnimalPuzzleGame {
 
     playSuccessSound() {
         if (this.audioContext) {
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, C (高)
+            const notes = [523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, index) => {
                 setTimeout(() => {
                     const oscillator = this.audioContext.createOscillator();
@@ -433,7 +416,6 @@ class AnimalPuzzleGame {
             this.newGame();
         });
         
-        // Web Audio API の初期化（ユーザーアクション後）
         document.addEventListener('click', () => {
             if (!this.audioContext) {
                 this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -442,19 +424,6 @@ class AnimalPuzzleGame {
     }
 }
 
-// ゲーム開始
 document.addEventListener('DOMContentLoaded', () => {
     new AnimalPuzzleGame();
 });
-
-// パズルのターゲットパターンを視覚的に表示する関数
-function showTargetPattern() {
-    const game = window.legoGame;
-    if (game) {
-        console.log('Target Pattern:');
-        for (let i = 0; i < 16; i++) {
-            if (i % 4 === 0) console.log(''); // 新しい行
-            console.log(game.targetPattern[i] || '⬜', '');
-        }
-    }
-}
